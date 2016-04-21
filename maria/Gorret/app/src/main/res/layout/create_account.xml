@@ -10,7 +10,6 @@
         <EditText android:textSize="15.0sp" android:id="@+id/edtPass" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Password" android:singleLine="true" android:inputType="textPassword" />
         <EditText android:textSize="15.0sp" android:id="@+id/edtConPass" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Confirm password" android:singleLine="true" android:inputType="textPassword" />
         <EditText android:textSize="15.0sp" android:id="@+id/edtTel" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Telephone" android:ems="10" android:singleLine="true" android:inputType="phone" />
-        <EditText android:textSize="15.0sp" android:id="@+id/edtBisName" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Business name" android:singleLine="true" />
         <Button android:layout_gravity="center_horizontal" android:id="@+id/bSubmit" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Submit" />
     </LinearLayout>
 </LinearLayout>

@@ -60,6 +60,10 @@
             android:name=".Product_list"
             android:label="@string/title_activity_product_list" >
         </activity>
+        <activity
+            android:name=".ModificationPage"
+            android:label="@string/title_activity_modification_page" >
+        </activity>
     </application>
 
 </manifest>

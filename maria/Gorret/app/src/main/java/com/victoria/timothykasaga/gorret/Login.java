@@ -9,7 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -18,6 +23,8 @@ import android.widget.TextView;
 public class Login extends Fragment {
        TextView blogin,bcreate,bforgot;
        View view;
+        EditText eUName;
+        EditText eUpass;
     public Login() {
         // Required empty public constructor
     }
@@ -37,12 +44,26 @@ public class Login extends Fragment {
         blogin = (TextView) view.findViewById(R.id.btnLogin);
         bcreate = (TextView) view.findViewById(R.id.btnCreate);
         bforgot = (TextView) view.findViewById(R.id.btnfgPass);
+       eUName = ((EditText)view.findViewById(R.id.edtAUName));
+       eUpass = ((EditText)view.findViewById(R.id.edtAUpass));
 
         blogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),Add_supermarket.class);
-                startActivity(intent);
+                String username = eUName.getText().toString();
+                String userpassword = eUpass.getText().toString();
+                //check whether password fields are equal
+                if ((username.equals("")) || (userpassword.equals(""))) {
+                    Toast.makeText(getActivity(), "Please insert username and password", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Admin admin = new Admin(username,userpassword);
+                    ServerRequests serverRequests = new ServerRequests(getActivity());
+                    serverRequests.authenticateAdmin(admin,Login.this);
+                   // Intent intent = new Intent(getActivity(),Add_supermarket.class);
+                   // startActivity(intent);
+                }
+
             }
         });
 
@@ -62,5 +83,52 @@ public class Login extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+    }
+
+    public void continueExecution(String response, Login login){
+            if(response.equals("fail"+"\n")){
+                Toast.makeText(login.getActivity(),"Incorrect credentials",Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(login.getActivity(),"User exists",Toast.LENGTH_SHORT).show();
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(response);
+                    try
+                    {
+                        if ((jsonObject.has("uname")) && (jsonObject.has("pass")))
+                        {
+                            String username = jsonObject.getString("uname");
+                            String userpassword  = jsonObject.getString("pass");
+                            int i = jsonObject.getInt("logintimes");
+
+                            if (i != 0) {
+                                login.eUName.setText("");
+                                login.eUpass.setText("");
+                                Intent intent = new Intent(login.getActivity(), ModificationPage.class);
+                                intent.putExtra("username", username);
+                                startActivity(intent);
+
+                            }else{
+                                login.eUName.setText("");
+                                login.eUpass.setText("");
+                                Intent intent = new Intent(login.getActivity(), Add_supermarket.class);
+                                intent.putExtra("username", username);
+                                startActivity(intent);
+
+                            }
+
+                        }
+                    }
+                    catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
+
     }
 }
