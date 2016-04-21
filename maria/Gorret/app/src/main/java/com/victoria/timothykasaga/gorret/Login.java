@@ -99,6 +99,16 @@ public class Login extends Fragment {
                         {
                             String username = jsonObject.getString("uname");
                             String userpassword  = jsonObject.getString("pass");
+                            String name = jsonObject.getString("name");
+                            String email  = jsonObject.getString("email");
+                            String telno = jsonObject.getString("tel");
+
+                            //set logged in user;
+                            Admin admin = new Admin(name,email,username,userpassword,telno);
+                            LocalDatabase localDatabase = new LocalDatabase(login.getActivity());
+                            localDatabase.storeData(admin);
+                            localDatabase.setuserLoggedIn(true);
+
                             int i = jsonObject.getInt("logintimes");
 
                             if (i != 0) {
