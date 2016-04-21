@@ -27,6 +27,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Add_supermarket"
+            android:label="add supermarket" >
+            <intent-filter>
+                <action android:name="com.timothykasaga.gorret.ADD_SUPERMARKET" />
+
+                <category android:name="android.intent.category.default" />
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -38,6 +47,18 @@
         <activity
             android:name=".Locate_supermarket"
             android:label="@string/title_activity_locate_supermarket" >
+        </activity>
+        <activity
+            android:name=".Create_account"
+            android:label="@string/title_activity_create_account" >
+        </activity>
+        <activity
+            android:name=".Supermarket_details"
+            android:label="@string/title_activity_supermarket_details" >
+        </activity>
+        <activity
+            android:name=".Product_list"
+            android:label="@string/title_activity_product_list" >
         </activity>
     </application>
 

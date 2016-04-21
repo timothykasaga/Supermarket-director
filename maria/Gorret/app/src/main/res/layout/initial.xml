@@ -20,7 +20,9 @@
                 android:entries="@array/services"
                 android:layout_marginTop="10.0dip"
                 android:dividerHeight="1.0dip" />
-            <Button android:id="@+id/butadmin" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:text="Administration login page" android:layout_below="@+id/listView" />
+            <Button android:id="@+id/butadmin" android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="10.0dip"
+                android:text="Administration login page" android:layout_below="@+id/listView" />
         </LinearLayout>
     </LinearLayout>
 

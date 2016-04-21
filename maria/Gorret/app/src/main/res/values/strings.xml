@@ -19,5 +19,9 @@
     </array>
 
     <string name="title_activity_locate_supermarket">Map</string>
+    <string name="title_activity_create_account">Create account</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_supermarket_details">Supermarket_details</string>
+    <string name="title_activity_product_list">Product_list</string>
 
 </resources>
