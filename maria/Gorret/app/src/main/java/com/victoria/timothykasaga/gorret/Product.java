@@ -26,6 +26,7 @@ public class Product
     String prodt_id;
     double unit_cost;
     String units;
+    String section_name;
 
     protected Product(Parcel paramParcel)
     {
@@ -33,14 +34,16 @@ public class Product
         this.prodt_id = paramParcel.readString();
         this.units = paramParcel.readString();
         this.unit_cost = paramParcel.readDouble();
+        this.section_name = paramParcel.readString();
     }
 
-    public Product(String name, String prodt_id, String units, double unit_cost)
+    public Product(String name, String prodt_id, String units, double unit_cost, String section_name)
     {
         this.name = name;
         this.prodt_id = prodt_id;
         this.units = units;
         this.unit_cost = unit_cost;
+        this.section_name = section_name;
     }
 
     public int describeContents()
@@ -54,6 +57,7 @@ public class Product
         paramParcel.writeString(this.prodt_id);
         paramParcel.writeString(this.units);
         paramParcel.writeDouble(this.unit_cost);
+        paramParcel.writeString(this.section_name);
     }
 }
 

@@ -4,4 +4,7 @@
     tools:context="com.victoria.timothykasaga.gorret.Product_list">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/addbtn" android:title="Add" app:showAsAction="always" />
+    <item android:id="@+id/savebtn" android:title="Done" app:showAsAction="always" />
+
 </menu>

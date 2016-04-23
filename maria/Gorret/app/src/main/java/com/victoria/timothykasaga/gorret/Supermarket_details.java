@@ -64,6 +64,32 @@ public class Supermarket_details extends AppCompatActivity {
             txtLoc.setText(String.valueOf(lat));
             txtLoc1.setText(String.valueOf(log));
         }else{
+            LocalDatabase localDatabase = new LocalDatabase(this);
+            DetailsPack detailsPack = getIntent().getParcelableExtra("com.timothykasaga.victoria.returnedpack");
+            productArrayList = getIntent().getParcelableArrayListExtra("com.timothykasaga.victoria.prodts");
+            esdname.setText(detailsPack.getS_name());
+            esdloc.setText(detailsPack.getS_location());
+            esdweb.setText(detailsPack.getS_website());
+            esdema.setText(detailsPack.getS_email());
+            esdtel.setText(detailsPack.getS_email());
+            esddes.setText(detailsPack.getS_desc());
+            txtLoc.setText(detailsPack.getD_lat());
+            txtLoc1.setText(detailsPack.getD_log());
+
+            String prodts = "";
+            if(productArrayList.size() != 0){
+                bAddProdt.setTextColor(getResources().getColor(R.color.red));
+                countclick++;
+                int i = 0;
+                while (i < productArrayList.size()){
+                    prodts = prodts+ productArrayList.get(i).name+ ": "+productArrayList.get(i).unit_cost+"\n";
+                    i++;
+                }
+            }else{
+                prodts = "No products";
+            }
+            Toast.makeText(getApplicationContext(), "From Product list Username : " + detailsPack.getAdmin()+"\n"+
+                    localDatabase.getLocation().latitude + "\nProducts: "+prodts, Toast.LENGTH_SHORT).show();
 
         }
 
@@ -87,6 +113,9 @@ public class Supermarket_details extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DetailsPack detailsPack = readDetails();
+                if(countclick != 0){
+                    Toast.makeText(getApplicationContext(),"Products added",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
