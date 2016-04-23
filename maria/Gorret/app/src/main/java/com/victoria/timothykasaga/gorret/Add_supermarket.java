@@ -109,12 +109,12 @@ public class Add_supermarket extends FragmentActivity implements OnMapReadyCallb
 
     public void onClickButtonListerner()
     {
-        int i = group.getCheckedRadioButtonId();
-        radioButton = (RadioButton) findViewById(i);
+
         btnDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                int i = group.getCheckedRadioButtonId();
+                radioButton = (RadioButton) findViewById(i);
                 if (radioButton.getText().toString().equals("Use GPS"))
                 {
                     gpStracker = new GPStracker(Add_supermarket.this);
@@ -122,43 +122,76 @@ public class Add_supermarket extends FragmentActivity implements OnMapReadyCallb
                         latitude = gpStracker.getLatitude();
                         longitude = gpStracker.getLongitude();
                         mapLatLng = new LatLng(latitude,longitude);
-                        Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + mapLatLng.latitude
-                                + "\nLong: " + mapLatLng.longitude, Toast.LENGTH_LONG).show();
-
-                        Intent intent = new Intent(Add_supermarket.this,Supermarket_details.class);
-                        startActivity(intent);
-
-                    }else{
-                        gpStracker.showSettingsAlert();
-
-                    }
-                }
-                if (radioButton.getText().toString().equals("Touch place"))
-                {
-                    latitude = 2.0D;
-                    longitude = 2.0D;
-                    if (mapLatLng != null)
-                    {
-                        latitude = mapLatLng.latitude;
-                        longitude = mapLatLng.longitude;
-
                         String local = "";
+                        String sublocal = "";
+                        String addlocation = "";
                         Geocoder geocoder = new Geocoder(getApplicationContext());
                         List<Address> addresses;
                         try {
                             addresses = geocoder.getFromLocation(latitude,longitude,1);
                             if(!addresses.isEmpty()){
                                 Address address = addresses.get(0);
-                                local = address.getCountryName();
+                                local = address.getLocality();
+                                sublocal = address.getSubLocality();
+                                if(sublocal != null){
+                                    addlocation = sublocal;
+                                }else {
+                                    addlocation = local;
+                                }
 
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
-                        Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude
-                                + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Your Location from GPS is - \nLat: " + mapLatLng.latitude
+                                + "\nLong: " + mapLatLng.longitude+"\n Address: "+addlocation, Toast.LENGTH_LONG).show();
+                        localDatabase.storeLocation(mapLatLng);
+                        Intent intent = new Intent(Add_supermarket.this,Supermarket_details.class);
+                        intent.putExtra("flags","add");
+                        startActivity(intent);
+
+                    }else{
+                        gpStracker.showSettingsAlert();
+
                     }
+                }else if (radioButton.getText().toString().equals("Touch place"))
+                {
+                    if (mapLatLng != null)
+                    {
+                        latitude = mapLatLng.latitude;
+                        longitude = mapLatLng.longitude;
+
+                        String local = "";
+                        String sublocal ="";
+                        String addlocation ="";
+                        Geocoder geocoder = new Geocoder(getApplicationContext());
+                        List<Address> addresses;
+                        try {
+                            addresses = geocoder.getFromLocation(latitude,longitude,1);
+                            if(!addresses.isEmpty()){
+                                Address address = addresses.get(0);
+                                local = address.getLocality();
+                                sublocal = address.getSubLocality();
+                                if(sublocal != null){
+                                    addlocation = sublocal;
+                                }else {
+                                    addlocation = local;
+                                }
+
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        Toast.makeText(getApplicationContext(), "Your Location from Map is - \nLat: " + mapLatLng.latitude
+                                + "\nLong: " + mapLatLng.longitude+"\n Address: "+addlocation, Toast.LENGTH_LONG).show();
+
+                    }
+                    localDatabase.storeLocation(mapLatLng);
+                    Intent intent = new Intent(Add_supermarket.this,Supermarket_details.class);
+                    intent.putExtra("flags","add");
+                    startActivity(intent);
                 }
 
 
@@ -173,4 +206,6 @@ public class Add_supermarket extends FragmentActivity implements OnMapReadyCallb
         group = (RadioGroup) findViewById(R.id.rg1);
         btnDetails = (Button) findViewById(R.id.butDets);
     }
+
+
 }

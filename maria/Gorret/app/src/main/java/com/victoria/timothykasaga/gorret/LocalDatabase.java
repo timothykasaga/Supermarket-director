@@ -3,6 +3,8 @@ package com.victoria.timothykasaga.gorret;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by Leontymo on 4/21/2016.
  */
@@ -21,6 +23,19 @@ public class LocalDatabase {
         SPEditor.putString("Tel",admin.tel);
         SPEditor.putString("Email",admin.email);
         SPEditor.commit();
+    }
+
+    public void storeLocation(LatLng latLng){
+        SharedPreferences.Editor SPEditor = localDatabase.edit();
+        SPEditor.putFloat("latitude", (float) latLng.latitude);
+        SPEditor.putFloat("longitude", (float) latLng.longitude);
+        SPEditor.commit();
+    }
+
+    public LatLng getLocation(){
+        LatLng latLng;
+        latLng = new LatLng(localDatabase.getFloat("latitude",0),localDatabase.getFloat("longitude",0));
+        return latLng;
     }
     public Admin getLoggedInAdmin(){
         String name = localDatabase.getString("Name","");
