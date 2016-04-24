@@ -64,6 +64,7 @@ public class Supermarket_details extends AppCompatActivity {
             txtLoc.setText(String.valueOf(lat));
             txtLoc1.setText(String.valueOf(log));
         }else{
+            btsubdet.setEnabled(true);
             LocalDatabase localDatabase = new LocalDatabase(this);
             DetailsPack detailsPack = getIntent().getParcelableExtra("com.timothykasaga.victoria.returnedpack");
             productArrayList = getIntent().getParcelableArrayListExtra("com.timothykasaga.victoria.prodts");
@@ -71,7 +72,7 @@ public class Supermarket_details extends AppCompatActivity {
             esdloc.setText(detailsPack.getS_location());
             esdweb.setText(detailsPack.getS_website());
             esdema.setText(detailsPack.getS_email());
-            esdtel.setText(detailsPack.getS_email());
+            esdtel.setText(detailsPack.getS_phone());
             esddes.setText(detailsPack.getS_desc());
             txtLoc.setText(detailsPack.getD_lat());
             txtLoc1.setText(detailsPack.getD_log());
@@ -113,8 +114,12 @@ public class Supermarket_details extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DetailsPack detailsPack = readDetails();
+                //Must send both product list and detailsPack
                 if(countclick != 0){
+                    ServerRequests serverRequests = new ServerRequests(Supermarket_details.this);
+                    serverRequests.storeSupermktDetailsInBackgound(detailsPack,productArrayList,Supermarket_details.this);
                     Toast.makeText(getApplicationContext(),"Products added",Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -184,5 +189,14 @@ public class Supermarket_details extends AppCompatActivity {
         detailsPack  = new DetailsPack(sname,location,sweb,sema,stel,sdes,lat,log,
                 new LocalDatabase(this).getLoggedInAdmin().username);
         return detailsPack;
+    }
+
+    public void continueExecution(String res, Supermarket_details supermarket_details) {
+        if(res.equals("success"+"\n")){
+            Toast.makeText(supermarket_details.getApplicationContext(),"Data saved server response: "+res,Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(supermarket_details.getApplicationContext(),"Data not saved server response: "+res,Toast.LENGTH_LONG).show();
+
+        }
     }
 }

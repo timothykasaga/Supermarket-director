@@ -28,11 +28,8 @@ import java.util.Objects;
 public class Product_list extends AppCompatActivity {
     Toolbar toolbar;
     ArrayList<String> arrayList = new ArrayList();
-    Button bAdd;
-    Button bDone;
     final Context context = this;
     DetailsPack detailsPack;
-    EditText edtpname;
     ListView list;
     ArrayList<Product> prodtArray = new ArrayList();
 
@@ -197,13 +194,10 @@ public class Product_list extends AppCompatActivity {
     }
 
     public void initialize(){
-       // bAdd = ((Button)findViewById(R.id.btn_padd));
-       // bDone = ((Button)findViewById(R.id.btndone));
-      //  edtpname = ((EditText)findViewById(R.id.edtpname));
         list = ((ListView)findViewById(R.id.list_prodts));
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Product list");
+        getSupportActionBar().setTitle("Product list");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         toolbar.setNavigationIcon(R.drawable.home);
 
