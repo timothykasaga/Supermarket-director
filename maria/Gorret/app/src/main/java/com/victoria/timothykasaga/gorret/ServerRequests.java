@@ -50,6 +50,196 @@ public class ServerRequests {
         new StoreSupermktdetailsAsyncTask(detailsPack,productArrayList,supermarket_details).execute();
     }
 
+    public void searchBySmName(String name, Locate_supermarket locate_supermarket) {
+        progressDialog.show();
+        new searchBySmNameAsnycTasks(locate_supermarket,name).execute();
+    }
+
+    public void searchAllSm(Locate_supermarket locate_supermarket) {
+        progressDialog.show();
+        new searchAllSmAsnycTasks(locate_supermarket).execute();
+    }
+
+    public void searchBySmLocation(String location, Locate_supermarket locate_supermarket) {
+        progressDialog.show();
+        new searchBySmLocationAsnycTasks(locate_supermarket,location).execute();
+    }
+
+
+
+    private class searchBySmLocationAsnycTasks extends AsyncTask<Void,Void,String>{
+        Locate_supermarket locate_supermarket;
+        String location;
+
+        private searchBySmLocationAsnycTasks(Locate_supermarket locate_supermarket, String location) {
+            this.locate_supermarket = locate_supermarket;
+            this.location = location;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String result = "";
+            try {
+                StringBuilder content = new StringBuilder();
+                // URL url = new URL(SERVER+"registerUser.php");
+                URL url = new URL("http://10.0.3.2/smsd/searchByLocation.php");
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setReadTimeout(CONNECTION_TIMEOUT);
+                urlConnection.setConnectTimeout(CONNECTION_TIMEOUT);
+                urlConnection.setDoInput(true);
+                urlConnection.setDoOutput(true);
+
+                Uri.Builder builder = new Uri.Builder().appendQueryParameter("Location",location);
+
+
+                String query = builder.build().getEncodedQuery();
+
+                OutputStream os = urlConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                String line;
+                // read from the urlconnection via the bufferedreader
+                while ((line = bufferedReader.readLine()) != null)
+                {
+                    content.append(line + "\n");
+                }
+                bufferedReader.close();
+                result = content.toString();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            progressDialog.dismiss();
+            if(!s.equals("")){
+            locate_supermarket.continueExecution(s,locate_supermarket);
+            }
+
+        }
+    }
+
+    private class searchAllSmAsnycTasks extends AsyncTask<Void,Void,String>{
+        Locate_supermarket locate_supermarket;
+
+
+        private searchAllSmAsnycTasks(Locate_supermarket locate_supermarket) {
+            this.locate_supermarket = locate_supermarket;
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String result = "";
+            try {
+                StringBuilder content = new StringBuilder();
+                // URL url = new URL(SERVER+"registerUser.php");
+                URL url = new URL("http://10.0.3.2/smsd/searchAllSm.php");
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setReadTimeout(CONNECTION_TIMEOUT);
+                urlConnection.setConnectTimeout(CONNECTION_TIMEOUT);
+                urlConnection.setDoInput(true);
+                urlConnection.setDoOutput(true);
+
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                String line;
+                // read from the urlconnection via the bufferedreader
+                while ((line = bufferedReader.readLine()) != null)
+                {
+                    content.append(line + "\n");
+                }
+                bufferedReader.close();
+                result = content.toString();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            progressDialog.dismiss();
+            if(!s.equals("")){
+                locate_supermarket.continueExecution(s,locate_supermarket);
+            }
+
+        }
+    }
+
+    private class searchBySmNameAsnycTasks extends AsyncTask<Void,Void,String>{
+        Locate_supermarket locate_supermarket;
+        String name;
+
+        private searchBySmNameAsnycTasks(Locate_supermarket locate_supermarket, String name) {
+            this.locate_supermarket = locate_supermarket;
+            this.name = name;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String result = "";
+            try {
+                StringBuilder content = new StringBuilder();
+                // URL url = new URL(SERVER+"registerUser.php");
+                URL url = new URL("http://10.0.3.2/smsd/searchByName.php");
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setReadTimeout(CONNECTION_TIMEOUT);
+                urlConnection.setConnectTimeout(CONNECTION_TIMEOUT);
+                urlConnection.setDoInput(true);
+                urlConnection.setDoOutput(true);
+
+                Uri.Builder builder = new Uri.Builder().appendQueryParameter("Name",name);
+
+                String query = builder.build().getEncodedQuery();
+
+                OutputStream os = urlConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                String line;
+                // read from the urlconnection via the bufferedreader
+                while ((line = bufferedReader.readLine()) != null)
+                {
+                    content.append(line + "\n");
+                }
+                bufferedReader.close();
+                result = content.toString();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            progressDialog.dismiss();
+            if(!s.equals("")){
+                locate_supermarket.continueExecution(s,locate_supermarket);
+            }
+
+        }
+    }
+
     private class StoreAdminsAsyncTask extends AsyncTask<Void,Void,String>{
         Admin admin;
         Create_account create_account;
