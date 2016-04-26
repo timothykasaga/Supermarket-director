@@ -65,7 +65,73 @@ public class ServerRequests {
         new searchBySmLocationAsnycTasks(locate_supermarket,location).execute();
     }
 
+    public void getSupermarketWithProduct(String product_name, Compare_prices compare_prices) {
+            progressDialog.show();
+            new getAllSupermarketWithprodtAsnycTasks(compare_prices,product_name).execute();
+    }
 
+       //here
+       private class getAllSupermarketWithprodtAsnycTasks extends AsyncTask<Void,Void,String>{
+           Compare_prices compare_prices;
+           String productname;
+
+           private getAllSupermarketWithprodtAsnycTasks(Compare_prices compare_prices, String productname) {
+               this.compare_prices = compare_prices;
+               this.productname = productname;
+           }
+
+           @Override
+           protected String doInBackground(Void... voids) {
+               String result = "";
+               try {
+                   StringBuilder content = new StringBuilder();
+                   // URL url = new URL(SERVER+"registerUser.php");
+                   URL url = new URL("http://10.0.3.2/smsd/getProductPrice.php");
+                   HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                   urlConnection.setReadTimeout(CONNECTION_TIMEOUT);
+                   urlConnection.setConnectTimeout(CONNECTION_TIMEOUT);
+                   urlConnection.setDoInput(true);
+                   urlConnection.setDoOutput(true);
+
+                   Uri.Builder builder = new Uri.Builder().appendQueryParameter("Product",productname);
+
+
+                   String query = builder.build().getEncodedQuery();
+
+                   OutputStream os = urlConnection.getOutputStream();
+                   BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
+                   writer.write(query);
+                   writer.flush();
+                   writer.close();
+                   os.close();
+
+                   BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                   String line;
+                   // read from the urlconnection via the bufferedreader
+                   while ((line = bufferedReader.readLine()) != null)
+                   {
+                       content.append(line + "\n");
+                   }
+                   bufferedReader.close();
+                   result = content.toString();
+
+
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
+               return result;
+           }
+
+           @Override
+           protected void onPostExecute(String s) {
+               super.onPostExecute(s);
+               progressDialog.dismiss();
+               if(!s.equals("")){
+                   compare_prices.continueExecution(s,compare_prices);
+               }
+
+           }
+       }
 
     private class searchBySmLocationAsnycTasks extends AsyncTask<Void,Void,String>{
         Locate_supermarket locate_supermarket;
