@@ -51,7 +51,7 @@
                 android:textAlignment="viewStart" />
             <TextView android:textSize="25.0sp" android:textColor="@color/white"
                 android:layout_width="fill_parent" android:layout_height="50.0dip"
-                android:text="Price" android:layout_weight="1.0" android:textAlignment="viewStart" />
+                android:text="Price" android:layout_weight="2.0" android:textAlignment="viewStart" />
         </LinearLayout>
         <ScrollView android:background="#ff707277" android:layout_width="fill_parent"
             android:layout_gravity="center"
@@ -61,7 +61,7 @@
                 <ListView android:id="@+id/list_compare"
                     android:background="#ff50a6e7" android:layout_width="fill_parent"
                     android:layout_height="350.0dip" android:textAlignment="viewStart"
-                    android:layout_marginTop="-10dp" />
+                     />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

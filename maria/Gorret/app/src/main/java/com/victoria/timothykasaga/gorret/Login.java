@@ -89,7 +89,7 @@ public class Login extends Fragment {
             if(response.equals("fail"+"\n")){
                 Toast.makeText(login.getActivity(),"Incorrect credentials",Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(login.getActivity(),"User exists",Toast.LENGTH_SHORT).show();
+               // Toast.makeText(login.getActivity(),"User exists",Toast.LENGTH_SHORT).show();
                 try
                 {
                     JSONObject jsonObject = new JSONObject(response);

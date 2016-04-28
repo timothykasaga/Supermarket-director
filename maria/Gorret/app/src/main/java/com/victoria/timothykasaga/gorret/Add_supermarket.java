@@ -50,7 +50,7 @@ public class Add_supermarket extends FragmentActivity implements OnMapReadyCallb
         Admin admin = localDatabase.getLoggedInAdmin();
         Toast.makeText(getApplicationContext(),admin.username,Toast.LENGTH_SHORT).show();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Locate supermarket");
+        toolbar.setTitle("Supermarket location");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         toolbar.setNavigationIcon(R.drawable.home);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

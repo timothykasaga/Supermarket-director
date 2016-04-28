@@ -91,7 +91,7 @@ public class Create_account extends AppCompatActivity {
         bSub = ((Button)findViewById(R.id.bSubmit));
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Locate supermarket");
+        toolbar.setTitle("Registration");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         toolbar.setNavigationIcon(R.drawable.home);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

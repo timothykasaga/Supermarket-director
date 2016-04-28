@@ -1,8 +1,10 @@
 package com.victoria.timothykasaga.gorret;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -46,6 +49,8 @@ public class Compare_prices extends Fragment {
     String[] supermkts;
     private EditText t_pdt_name;
     View view;
+    List<String> productlist = null;
+   ArrayList<String> selectedSupermarkets = null;
     public Compare_prices() {
         // Required empty public constructor
     }
@@ -72,14 +77,6 @@ public class Compare_prices extends Fragment {
             }
         });
 
-        //set click listener for comparing supermarkets with product;
-        bCompare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-            }
-        });
         return view;
     }
 
@@ -93,14 +90,16 @@ public class Compare_prices extends Fragment {
         bget_prodt = ((Button)this.view.findViewById(R.id.btn_get_prodt));
         bCompare = ((Button)this.view.findViewById(R.id.btn_Compare));
 
+
+
     }
 
     public void continueExecution(String s, Compare_prices compare_prices) {
       if(!s.equals("fail"+"\n")){
-            Toast.makeText(compare_prices.getActivity(),s,Toast.LENGTH_SHORT).show();
+           // Toast.makeText(compare_prices.getActivity(),s,Toast.LENGTH_SHORT).show();
           try
           {
-              ArrayList<Supermarket_product> supermarket_products = new ArrayList<>();
+              final ArrayList<Supermarket_product> supermarket_products = new ArrayList<>();
               JSONArray paramAnonymousView = new JSONArray(s);
               int i = 0;
               //Put product details in arraylist of type supermarket_prodt
@@ -121,28 +120,20 @@ public class Compare_prices extends Fragment {
               }
               //check whether empty
               if(!(supermarket_products.size() == 0)){
-                    final List<String> productlist = new ArrayList<>();
+                  //Get supermarket names to populate spinner
+                  productlist = new ArrayList<>();
                   for (int j = 0; j < supermarket_products.size(); j++) {
                         productlist.add(supermarket_products.get(j).supermarket_name+" "+supermarket_products.get(j).location);
                   }
                   productlist.add("All");
 
-                  //test code
-                  Collections.sort(supermarket_products, new Supermarket_product.PriceComparator());
-                  String xxx ="";
-                  for (int j = 0; j < supermarket_products.size(); j++) {
-                      xxx = xxx + supermarket_products.get(j).supermarket_name+" "+supermarket_products.get(j).location+" "
-                              +supermarket_products.get(j).unitcost+"\n";
-                  }
-                  Toast.makeText(getActivity(),xxx,Toast.LENGTH_LONG).show();
-                  //end test code
-
-
+                    //Populate spinner
                   ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,productlist);
                   spinner.setAdapter(arrayAdapter);
                   bCompare.setEnabled(true);
+
                   //set onitem selected listener for spinner
-                  final ArrayList<String> selectedSupermarkets = new ArrayList<>();
+                  selectedSupermarkets = new ArrayList<>();
                   spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                       @Override
                       public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -151,17 +142,70 @@ public class Compare_prices extends Fragment {
                           }else if(adapterView.getSelectedItem().toString().equals("All"))
                           {
                                 productlist.remove(productlist.size()-1);
-                              productlist.toArray();
-
+                                productlist.toArray();
+                               //Populate list with supermarkets
                               ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                                       android.R.layout.simple_list_item_1, productlist);
                               listSelected.setAdapter(adapter);
+
+
+                                  listSelected.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                                      @Override
+                                      public boolean onItemLongClick(final AdapterView<?> adapterView1, View view, final int position, long l) {
+                                          final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                                          alertDialog.setMessage("Delete Item ?");
+                                          alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                              @Override
+                                              public void onClick(DialogInterface dialogInterface, int i) {
+                                              }
+                                          });
+                                          alertDialog.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                              @Override
+                                              public void onClick(DialogInterface dialogInterface, int i) {
+                                                  productlist.remove(adapterView1.getItemAtPosition(position).toString());
+
+                                                  ListAdapter listAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, productlist);
+                                                  listSelected.setAdapter(listAdapter);
+                                              }
+                                          });
+                                          alertDialog.show();
+                                          return false;
+                                      }
+                                  });
+
+
                           }else{
                               if(!selectedSupermarkets.contains(adapterView.getSelectedItem().toString()))
                               { selectedSupermarkets.add(adapterView.getSelectedItem().toString());
                                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                                     android.R.layout.simple_list_item_1, selectedSupermarkets);
                                     listSelected.setAdapter(adapter);
+
+
+                                  listSelected.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                                      @Override
+                                      public boolean onItemLongClick(final AdapterView<?> adapterView1, View view, final int position, long l) {
+                                          final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                                          alertDialog.setMessage("Delete Item ?");
+                                          alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                              @Override
+                                              public void onClick(DialogInterface dialogInterface, int i) {
+
+                                              }
+                                          });
+                                          alertDialog.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                              @Override
+                                              public void onClick(DialogInterface dialogInterface, int i) {
+                                                  selectedSupermarkets.remove(adapterView1.getItemAtPosition(position).toString());
+
+                                                  ListAdapter listAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, selectedSupermarkets);
+                                                  listSelected.setAdapter(listAdapter);
+                                              }
+                                          });
+                                          alertDialog.show();
+                                          return false;
+                                      }
+                                  });
                               }
                              }
                       }
@@ -171,6 +215,51 @@ public class Compare_prices extends Fragment {
 
                       }
                   });
+
+
+                  //try to compare
+                  //set click listener for comparing supermarkets with product;
+
+                  bCompare.setOnClickListener(new View.OnClickListener() {
+                      @Override
+                      public void onClick(View view) {
+                          final ArrayList<Supermarket_product> toCompare = new ArrayList<>();
+                          final ArrayList<String> selectedlist = new ArrayList<>();
+                          for(int x =0;x<listSelected.getCount();x++){
+                              selectedlist.add(listSelected.getItemAtPosition(x).toString());
+                          }
+
+
+                          if(listSelected.getCount() != 0){
+                          for (int counter = 0; counter < listSelected.getCount(); counter++) {
+                              for (int counttwo = 0; counttwo < supermarket_products.size(); counttwo++) {
+                                  if (listSelected.getItemAtPosition(counter).equals(supermarket_products.get(counttwo).supermarket_name
+                                          + " " + supermarket_products.get(counttwo).location)) {
+                                      toCompare.add(supermarket_products.get(counttwo));
+                                  }
+                              }
+                          }
+                          //check if selected is more than zero
+                          //test code
+                          Collections.sort(toCompare, new Supermarket_product.PriceComparator());
+                          String xxx = "";
+                          for (int j = 0; j < toCompare.size(); j++) {
+                              xxx = xxx + toCompare.get(j).supermarket_name + " " + toCompare.get(j).location + " "
+                                      + toCompare.get(j).unitcost + "\n";
+                          }
+
+                         // Toast.makeText(getActivity(), xxx, Toast.LENGTH_LONG).show();
+                            // Supermarket_product sp = toCompare.toArray();
+                           ListAdapter listAdapter = new CustomerAdapter(getContext(),toCompare);
+                           list_compare.setAdapter(listAdapter);
+                          //end test code
+                      }else {
+                              Toast.makeText(getActivity(), "Please select supermarkets", Toast.LENGTH_LONG).show();
+                          }
+                      }
+                  });
+
+
               }else{
                   Toast.makeText(compare_prices.getActivity(),"No supermarket found please try other products",Toast.LENGTH_SHORT).show();
               }
