@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.victoria.timothykasaga.gorret"
+        applicationId "com.victoria.timothykasaga.qrcodereader"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
@@ -19,15 +19,7 @@ android {
     }
 }
 
-repositories {
-    jcenter()
-}
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.journeyapps:zxing-android-embedded:3.0.2@aar'
-    compile 'com.google.zxing:core:3.2.0'
-    compile 'com.google.android.gms:play-services:8.3.0'
 }

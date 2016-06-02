@@ -42,7 +42,8 @@
                 android:hint="Product name" android:singleLine="true" />
             <Button android:textSize="20.0sp" android:padding="5.0dip"
                 android:layout_width="fill_parent" android:layout_height="wrap_content"
-                android:text="Go" />
+                android:text="Go"
+                android:id="@+id/btngetLoc" />
         </LinearLayout>
         <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent"
             android:layout_height="wrap_content" android:layout_margin="5.0dip">
