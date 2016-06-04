@@ -70,7 +70,80 @@ public class ServerRequests {
             new getAllSupermarketWithprodtAsnycTasks(compare_prices,product_name).execute();
     }
 
-       //here
+    public void getImageURLpath(Locate_product locate_product,String supermkt_id, String user_floor, String user_cell) {
+            progressDialog.show();
+            new getImageUrlAsnycTasks(locate_product,supermkt_id,user_floor,user_cell).execute();
+    }
+
+    //class fetchImageURl
+    private class getImageUrlAsnycTasks extends AsyncTask<Void,Void,String>{
+        Locate_product locate_product;
+        String supermkt_id; String user_floor; String user_cell;
+
+        private getImageUrlAsnycTasks(Locate_product locate_product, String supermkt_id, String user_floor, String user_cell) {
+            this.locate_product = locate_product;
+            this.supermkt_id = supermkt_id;
+            this.user_floor = user_floor;
+            this.user_cell = user_cell;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String result = "";
+            try {
+                StringBuilder content = new StringBuilder();
+                // URL url = new URL(SERVER+"registerUser.php");
+                URL url = new URL("http://10.0.3.2/smsd_locations/mapUserLocation.php");
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setReadTimeout(CONNECTION_TIMEOUT);
+                urlConnection.setConnectTimeout(CONNECTION_TIMEOUT);
+                urlConnection.setDoInput(true);
+                urlConnection.setDoOutput(true);
+
+                Uri.Builder builder = new Uri.Builder().appendQueryParameter("Supermarketid",supermkt_id)
+                        .appendQueryParameter("Userfloor",user_floor)
+                        .appendQueryParameter("Usercell",user_cell);
+
+
+                String query = builder.build().getEncodedQuery();
+
+                OutputStream os = urlConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                String line;
+                // read from the urlconnection via the bufferedreader
+                while ((line = bufferedReader.readLine()) != null)
+                {
+                    content.append(line + "\n");
+                }
+                bufferedReader.close();
+                result = content.toString();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            progressDialog.dismiss();
+            if(!s.equals("")){
+                locate_product.continueExecution(s,locate_product);
+            }
+
+        }
+    }
+
+
+    //here
        private class getAllSupermarketWithprodtAsnycTasks extends AsyncTask<Void,Void,String>{
            Compare_prices compare_prices;
            String productname;

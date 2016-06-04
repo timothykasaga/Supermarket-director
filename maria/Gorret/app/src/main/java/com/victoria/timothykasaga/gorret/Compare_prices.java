@@ -18,6 +18,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -35,7 +39,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class Compare_prices extends Fragment {
-
+    BarChart barChart;
     ArrayList<String> arrayList = new ArrayList();
     private Button bCompare;
     private Button bget_prodt;
@@ -85,11 +89,11 @@ public class Compare_prices extends Fragment {
         String[] initial = {"No product entered"};
         spinner.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,initial));
         listSelected = ((ListView)this.view.findViewById(R.id.list_selected));
-        list_compare = ((ListView)this.view.findViewById(R.id.list_compare));
+       // list_compare = ((ListView)this.view.findViewById(R.id.list_compare));
         t_pdt_name = ((EditText)this.view.findViewById(R.id.txt_pdt_name));
         bget_prodt = ((Button)this.view.findViewById(R.id.btn_get_prodt));
         bCompare = ((Button)this.view.findViewById(R.id.btn_Compare));
-
+        barChart = (BarChart) view.findViewById(R.id.mybargraph);
 
 
     }
@@ -243,15 +247,33 @@ public class Compare_prices extends Fragment {
                           //test code
                           Collections.sort(toCompare, new Supermarket_product.PriceComparator());
                           String xxx = "";
+
+                              //try bargraph data
+                              ArrayList<BarEntry> entries = new ArrayList<>();
+                              ArrayList<String> labels = new ArrayList<String>();
+
+
                           for (int j = 0; j < toCompare.size(); j++) {
                               xxx = xxx + toCompare.get(j).supermarket_name + " " + toCompare.get(j).location + " "
                                       + toCompare.get(j).unitcost + "\n";
+                              //Put data in bargrapgh data sets
+                            entries.add(new BarEntry((float) toCompare.get(j).unitcost,j));
+                            labels.add(toCompare.get(j).supermarket_name);
+
                           }
+                              BarDataSet dataset = new BarDataSet(entries, "Product price");
+                              BarData data = new BarData(labels, dataset);
+                              barChart.setData(data);
+                              barChart.setDescription("Price Comparison");
+
+                              //end bargraph trial
+
+                              Toast.makeText(getActivity(), "Touch graph area", Toast.LENGTH_LONG).show();
 
                          // Toast.makeText(getActivity(), xxx, Toast.LENGTH_LONG).show();
                             // Supermarket_product sp = toCompare.toArray();
-                           ListAdapter listAdapter = new CustomerAdapter(getContext(),toCompare);
-                           list_compare.setAdapter(listAdapter);
+                          /* ListAdapter listAdapter = new CustomerAdapter(getContext(),toCompare);
+                           list_compare.setAdapter(listAdapter); */
                           //end test code
                       }else {
                               Toast.makeText(getActivity(), "Please select supermarkets", Toast.LENGTH_LONG).show();

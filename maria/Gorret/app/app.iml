@@ -88,6 +88,7 @@
     <orderEntry type="library" exported="" name="play-services-location-8.3.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-plus-8.3.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-appindexing-8.3.0" level="project" />
+    <orderEntry type="library" exported="" name="MPAndroidChart-v2.2.5" level="project" />
     <orderEntry type="library" exported="" name="play-services-auth-8.3.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-wearable-8.3.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-base-8.3.0" level="project" />
